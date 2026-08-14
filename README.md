@@ -150,3 +150,27 @@ $$\dots \times (1 + 2031.73\%)^{\text{TierHaute\_Horlogerie}} \times (1 + 162.65
 ## References
 * Raffaelli, R. (2019). *Technology Reemergence: Creating New Value for Old Technologies in Swiss Mechanical Watchmaking, 1970-2008*. Administrative Science Quarterly, Vol. [cite_start]64(3), 576-618. https://journals.sagepub.com/doi/full/10.1177/0001839218778505 [cite: 245, 246, 247]
 * Steele, D. (2026). *Luxury Watches as a Frontier Asset Market: Institutional Depth, Trust Infrastructure, and the Economics of Secondary Exchange*. [cite_start]Watch Schools Working Paper Series (Working Paper No. 1). https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6328658 [cite: 248, 249, 250]
+
+---
+
+## Legal Disclaimer
+
+### 1. Scope, Purpose, and Non-Commerciality
+This repository, including all source code, documentation, and attached data files, is intended strictly for educational, research, and personal data science demonstration purposes. This project is entirely non-commercial. It is not designed, intended, or authorized to be used for commercial profit, arbitrage, or to compete with any existing marketplace.
+
+### 2. Fair Use and Limitations on Liability
+The analytical scripts and data are provided "as is" without warranty of any kind, either express or implied, including but not limited to the implied warranties of merchantability or fitness for a particular purpose. In no event shall the author(s) or copyright holder(s) be liable for any claim, damages, or other liability arising from, out of, or in connection with the software or the use of the hosted data files.
+
+### 3. Trademark, Ownership, and Non-Affiliation Acknowledgment
+All product names, logos, brand names, market prices, and structural data associated with "Chrono24" are trademarks, registered trademarks, or intellectual property of Chrono24 GmbH and its respective partners, manufacturers, or sellers. 
+* This repository is a completely independent, third-party project.
+* It is **not** sponsored, endorsed, authorized, affiliated, or associated with Chrono24 GmbH in any capacity.
+
+### 4. Data Provenance and System Integrity
+The dataset included in this repository was obtained from a publicly accessible, historical archive hosted by a third party on Kaggle. 
+* This software does **not** perform live web scraping, automated extraction, or API queries against Chrono24’s infrastructure.
+* This project causes zero network traffic or server load to Chrono24’s official website and operates strictly offline.
+* No personal identifiable information (PII), private user transaction data, or proprietary source code has been collected, stored, or distributed.
+
+### 5. Intellectual Property Rights and Take-Down Policy (DMCA)
+The historical dataset is included in this repository in good faith to ensure reproducibility of the analytical data models. The author does not assert any ownership over the underlying data records. If you are a legal representative of Chrono24 GmbH and object to the hosting of this static copy of historical data, please open an Issue or contact the repository owner directly. The specified files and references will be modified or permanently expunged immediately.
