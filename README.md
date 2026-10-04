@@ -1,30 +1,30 @@
 # Examining the Secondary Luxury Watch Market: What Defines the Market Price of a Watch?
 
 ## Project Overview
-This project investigates the decentralized pricing mechanisms of the online secondary watch marketplace. [cite_start]By deploying a multivariate log-linear econometric model, the analysis isolates how brand equity, structural watch specifications, and seller reputation influence final listing valuations[cite: 2, 35]. 
+This project investigates the decentralized pricing mechanisms of the online secondary watch marketplace. By deploying a multivariate log-linear econometric model, the analysis isolates how brand equity, structural watch specifications, and seller reputation influence final listing valuations. 
 
-[cite_start]The research utilizes cross-sectional market data from Chrono24 harvested in 2024 via Kaggle[cite: 53]. [cite_start]While the raw dataset spanned over 45,000 unique listings, a rigorous data cleaning pipeline trimmed the framework down to a high-fidelity sample size of **7,416 records** via listwise deletion to ensure robust statistical inference[cite: 53, 57, 58].
+The research utilizes cross-sectional market data from Chrono24 harvested in 2024 via Kaggle. While the raw dataset spanned over 45,000 unique listings, a rigorous data cleaning pipeline trimmed the framework down to a high-fidelity sample size of **7,416 records** via listwise deletion to ensure robust statistical inference.
 
 ---
 
 ## Core Hypotheses
-* [cite_start]**Brand Prestige & Exclusivity ($H_1$):** Brand prestige and exclusivity command significant, exponential price premiums over mainstream and consumer-level tiers under the *ceteris paribus* assumption[cite: 36].
-* **Technical Specifications ($H_2$):** A watch's intrinsic structural specifications, which serve as direct indicators of quality and micromechanical craftsmanship, exert a positive, statistically significant impact on the listing price[cite: 37, 44, 46].
-* **Seller Information Asymmetry ($H_3$):** In secondary digital spaces plagued by a lack of universal authentication, signals of dealer trust (e.g., high review counts and massive listing exposure) act as critical trust substitutes and command a measurable price premium[cite: 38, 48, 49].
+* **Brand Prestige & Exclusivity ($H_1$):** Brand prestige and exclusivity command significant, exponential price premiums over mainstream and consumer-level tiers under the *ceteris paribus* assumption.
+* **Technical Specifications ($H_2$):** A watch's intrinsic structural specifications, which serve as direct indicators of quality and micromechanical craftsmanship, exert a positive, statistically significant impact on the listing price.
+* **Seller Information Asymmetry ($H_3$):** In secondary digital spaces plagued by a lack of universal authentication, signals of dealer trust (e.g., high review counts and massive listing exposure) act as critical trust substitutes and command a measurable price premium.
 
 ---
 
 ## Data Pipeline & Feature Engineering
-[cite_start]The model incorporates a mix of 3 numerical and 11 categorical predictors extracted from an initial set of 24 variables[cite: 54, 242]. The following processing steps were executed programmatically within the R environment:
+The model incorporates a mix of 3 numerical and 11 categorical predictors extracted from an initial set of 24 variables. The following processing steps were executed programmatically within the R environment:
 
-* [cite_start]**Missing Data Normalization:** Trailing white spaces were stripped, and empty strings (`""`) or pseudo-null text placeholders (`"NA"`) were systematically mapped to official R missing values (`NA`) before applying complete-case operations[cite: 57].
-* **Outlier Mitigation:** Extreme data points within the dial surface metric were tightly capped at a maximum of $2500 \text{ mm}^2$ to filter out unrepresentative, unrealistically large anomalies[cite: 83, 84].
-* [cite_start]**High-Cardinality Consolidation (Brands):** The raw dataset spanned approximately 300 unique watch brands, rendering standard dummy variable estimation computationally unfeasible and prone to extreme overfitting[cite: 66, 67]. [cite_start]To resolve this, brands were mapped into two newly engineered factors[cite: 68]:
-  * **Tier:** A 6-level categorical segment reflecting luxury tier position (*Haute Horlogerie, Luxury, Entry Luxury, Fashion Jewelry, Consumer Enthusiast, and Niche Independent*)[cite: 69].
-  * [cite_start]**Country:** A 9-level factor grouping brands by historical geographic manufacturing hubs[cite: 68, 77].
-* [cite_start]**Material & Dial Factoring:** High-cardinality nominal variables were collapsed to elevate structural robustness[cite: 238]. [cite_start]`BraceletMaterial` was consolidated from 24 levels down to 7 groups, `Dial` was compressed from 22 levels down to 4 groups, and `CaseMaterial` was condensed into standardized classifications[cite: 77].
-* [cite_start]**Logarithmic Transformations:** To stabilize heavily right-skewed economic distributions, a natural log transformation was applied to the dependent variable `Price`[cite: 62, 64]. [cite_start]Skewed numerical predictors—namely `SellerNumReviews`, `SellerNumSales`, `ActiveListingNumSeller`, and `ModelAge`—were similarly log-transformed to mitigate skewness distortion[cite: 81].
-* [cite_start]**Age Calculation:** The numeric column `ModelAge` was engineered by anchoring the manufacturing vintage year against the dataset's baseline era of 2024 ($ModelAge = 2024 - Year$) to make the regression intercept directly interpretable[cite: 77].
+* **Missing Data Normalization:** Trailing white spaces were stripped, and empty strings (`""`) or pseudo-null text placeholders (`"NA"`) were systematically mapped to official R missing values (`NA`) before applying complete-case operations.
+* **Outlier Mitigation:** Extreme data points within the dial surface metric were tightly capped at a maximum of $2500 \text{ mm}^2$ to filter out unrepresentative, unrealistically large anomalies.
+* **High-Cardinality Consolidation (Brands):** The raw dataset spanned approximately 300 unique watch brands, rendering standard dummy variable estimation computationally unfeasible and prone to extreme overfitting. To resolve this, brands were mapped into two newly engineered factors:
+  * **Tier:** A 6-level categorical segment reflecting luxury tier position (*Haute Horlogerie, Luxury, Entry Luxury, Fashion Jewelry, Consumer Enthusiast, and Niche Independent*).
+  * **Country:** A 9-level factor grouping brands by historical geographic manufacturing hubs.
+* **Material & Dial Factoring:** High-cardinality nominal variables were collapsed to elevate structural robustness. `BraceletMaterial` was consolidated from 24 levels down to 7 groups, `Dial` was compressed from 22 levels down to 4 groups, and `CaseMaterial` was condensed into standardized classifications.
+* **Logarithmic Transformations:** To stabilize heavily right-skewed economic distributions, a natural log transformation was applied to the dependent variable `Price`. Skewed numerical predictors—namely `SellerNumReviews`, `SellerNumSales`, `ActiveListingNumSeller`, and `ModelAge`—were similarly log-transformed to mitigate skewness distortion.
+* **Age Calculation:** The numeric column `ModelAge` was engineered by anchoring the manufacturing vintage year against the dataset's baseline era of 2024 ($ModelAge = 2024 - Year$) to make the regression intercept directly interpretable.
 * **Invariant Variable Removal:** The variable `SellerPunctuality` was omitted entirely from the modeling layout because it only contained a single invariant logic state (`TRUE`).
 
 ---
@@ -32,53 +32,53 @@ This project investigates the decentralized pricing mechanisms of the online sec
 ## Econometric Methodology
 
 ### 1. Heteroskedasticity Correction via Generalized Least Squares (GLS)
-Initial Ordinary Least Squares (OLS) testing revealed severe heteroskedasticity[cite: 90, 92]. As watch values scaled upward into high-horology thresholds, thin data density caused model residuals to expand drastically[cite: 93, 94]. This directly violated the homoskedasticity Gauss-Markov assumption, making OLS standard errors untrustworthy and rendering raw p-values unreliable for significance testing[cite: 95, 96]. 
+Initial Ordinary Least Squares (OLS) testing revealed severe heteroskedasticity. As watch values scaled upward into high-horology thresholds, thin data density caused model residuals to expand drastically. This directly violated the homoskedasticity Gauss-Markov assumption, making OLS standard errors untrustworthy and rendering raw p-values unreliable for significance testing. 
 
-An Interaction White Test firmly rejected the homoskedastic null hypothesis ($p\text{-value} = 2.65 \times 10^{-40}$)[cite: 106, 110]. To resolve this, **Generalized Least Squares (GLS)** was implemented[cite: 111]. An auxiliary regression mapped log-squared residuals against all predictors, and the main model was reweighted by the inverse of the predicted squared errors ($1/\text{FirstPredSqError}$)[cite: 111]. A subsequent Breusch-Pagan test with Koenker correction yielded a p-value of 1.0, confirming complete stabilization of error variance[cite: 117].
+An Interaction White Test firmly rejected the homoskedastic null hypothesis ($p\text{-value} = 2.65 \times 10^{-40}$). To resolve this, **Generalized Least Squares (GLS)** was implemented. An auxiliary regression mapped log-squared residuals against all predictors, and the main model was reweighted by the inverse of the predicted squared errors ($1/\text{FirstPredSqError}$). A subsequent Breusch-Pagan test with Koenker correction yielded a p-value of 1.0, confirming complete stabilization of error variance.
 
 ### 2. Multicollinearity Assessment
-Calculating the Variance Inflation Factor (VIF) on the baseline model revealed strict collinearity exceeding the predefined threshold of 10 for $\log(SellerNumSales + 1)$ and $\log(SellerNumReviews + 1)$[cite: 121]. To resolve this over-specification, $\log(SellerNumSales + 1)$ was removed from the model[cite: 122]. Correlation tracking confirmed that its underlying proxy variance was cleanly transferred to the highly correlated remaining predictors, `ActiveListingNumSeller` and `SellerNumReviews`, preserving the transactional information layer[cite: 138, 139].
+Calculating the Variance Inflation Factor (VIF) on the baseline model revealed strict collinearity exceeding the predefined threshold of 10 for $\log(SellerNumSales + 1)$ and $\log(SellerNumReviews + 1)$. To resolve this over-specification, $\log(SellerNumSales + 1)$ was removed from the model. Correlation tracking confirmed that its underlying proxy variance was cleanly transferred to the highly correlated remaining predictors, `ActiveListingNumSeller` and `SellerNumReviews`, preserving the transactional information layer.
 
 ### 3. Stepwise Model Selection
-[cite_start]To safeguard against large-sample $p$-value hypersensitivity, two information criteria optimization loops were evaluated[cite: 168]. [cite_start]While backward Akaike Information Criterion (AIC) selection dropped only 3 marginal variables [cite: 128, 129][cite_start], the **Bayesian Information Criterion (BIC)** applied a stricter mathematical penalty for complexity based on sample size[cite: 130]. BIC successfully dropped 7 variables (`ModelAge`, `DeliveryForm`, `Availability`, `WaterResistance`, `FastShipper`, `Dial`, `TrustedSeller`), isolating a clean 13-variable layout that minimizes overfitting and ensures generalized stability[cite: 131, 132].
+To safeguard against large-sample $p$-value hypersensitivity, two information criteria optimization loops were evaluated. While backward Akaike Information Criterion (AIC) selection dropped only 3 marginal variables, the **Bayesian Information Criterion (BIC)** applied a stricter mathematical penalty for complexity based on sample size. BIC successfully dropped 7 variables (`ModelAge`, `DeliveryForm`, `Availability`, `WaterResistance`, `FastShipper`, `Dial`, `TrustedSeller`), isolating a clean 13-variable layout that minimizes overfitting and ensures generalized stability.
 
 ### 4. Specification Testing
-A Ramsey RESET test rejected a purely linear specification ($p\text{-value} = 1.83 \times 10^{-10}$), indicating missing non-linear terms[cite: 144]. Introducing cross-product interaction layers ($Tier \times CaseMaterial$) and a quadratic curve ($\text{DialFaceArea}^2$) raised the RESET test p-value to $1.81 \times 10^{-5}$[cite: 145]. 
+A Ramsey RESET test rejected a purely linear specification ($p\text{-value} = 1.83 \times 10^{-10}$), indicating missing non-linear terms. Introducing cross-product interaction layers ($Tier \times CaseMaterial$) and a quadratic curve ($\text{DialFaceArea}^2$) raised the RESET test p-value to $1.81 \times 10^{-5}$. 
 
-However, cross-tabulation exposed several zero-frequency cells and sparse observation pairs across the interaction grid matrix[cite: 149]. Consequently, these non-linear structures were deliberately excluded from the final production pipeline to prioritize model generalizability over localized in-sample fit[cite: 148].
+However, cross-tabulation exposed several zero-frequency cells and sparse observation pairs across the interaction grid matrix. Consequently, these non-linear structures were deliberately excluded from the final production pipeline to prioritize model generalizability over localized in-sample fit.
 
 ---
 
 ## Model Performance & Evaluation
-Before fitting the final estimators, the dataset was partitioned into an 80% training set and a 20% validation test set to measure out-of-sample performance[cite: 154].
+Before fitting the final estimators, the dataset was partitioned into an 80% training set and a 20% validation test set to measure out-of-sample performance.
 
-* [cite_start]**Predictive Capability:** On the actual unlogged price scale, the generalized final model yields an adjusted $R^2$ ranging stably between **35% and 50%**[cite: 160]. [cite_start]Out-of-sample metrics generally tracked within 5% of in-sample statistics, demonstrating strong predictive stability on unseen data[cite: 160].
-* **Model Limits:** Performance degradation and extreme variance occur gauges around rare vintage assets, ultra-niche independent manufacturers, and museum-grade collector pieces whose values transcend standardized physical dimensions[cite: 157].
-* [cite_start]**Factor Retention Strategy:** Structurally insignificant factor sub-dummies (e.g., `Smartwatch` under the movement variable) were explicitly retained to prevent information loss and preserve the mathematical integrity of sister levels within that categorical group[cite: 162, 164].
+* **Predictive Capability:** On the actual unlogged price scale, the generalized final model yields an adjusted $R^2$ ranging stably between **35% and 50%**. Out-of-sample metrics generally tracked within 5% of in-sample statistics, demonstrating strong predictive stability on unseen data.
+* **Model Limits:** Performance degradation and extreme variance occur gauges around rare vintage assets, ultra-niche independent manufacturers, and museum-grade collector pieces whose values transcend standardized physical dimensions.
+* **Factor Retention Strategy:** Structurally insignificant factor sub-dummies (e.g., `Smartwatch` under the movement variable) were explicitly retained to prevent information loss and preserve the mathematical integrity of sister levels within that categorical group.
 
 ---
 
 ## Empirical Findings & Interpretations
-[cite_start]Holding all other marketplace and material characteristics constant (*ceteris paribus*), back-transforming the log-linear coefficients yields the following insights[cite: 175, 178]:
+Holding all other marketplace and material characteristics constant (*ceteris paribus*), back-transforming the log-linear coefficients yields the following insights:
 
 ### The Brand Prestige Premium (Ref: Consumer Enthusiast)
-* **Haute Horlogerie:** Captures an astronomical **+2,031.73%** price premium, verifying that the top echelon of watchmaking operates as an elite status symbol[cite: 179].
-* [cite_start]**Luxury:** Commands an expected price expansion of **+716.09%**[cite: 182].
-* [cite_start]**Fashion & High Jewelry:** Displays a **+193.83%** expected price increase, capturing brand-name markup over raw horological metrics[cite: 181].
-* **Entry Luxury & Niche Independents:** Experience almost parallel validation from the secondary market, climbing **+162.65%** and **+163.80%** respectively, indicating that consumers value their brand equity equally[cite: 180].
+* **Haute Horlogerie:** Captures an astronomical **+2,031.73%** price premium, verifying that the top echelon of watchmaking operates as an elite status symbol.
+* **Luxury:** Commands an expected price expansion of **+716.09%**.
+* **Fashion & High Jewelry:** Displays a **+193.83%** expected price increase, capturing brand-name markup over raw horological metrics.
+* **Entry Luxury & Niche Independents:** Experience almost parallel validation from the secondary market, climbing **+162.65%** and **+163.80%** respectively, indicating that consumers value their brand equity equally.
 
 ### Technical Specification Premiums
-* [cite_start]**Movement Architecture:** Highlighting mechanical prestige, an **Automatic** movement yields an expected **+89.08%** price premium over standard utility Quartz setups, while **Manual Winding** configurations achieve a **+131.78%** expansion[cite: 186, 205].
-* [cite_start]**Material Specification:** Upgrading from standard Mineral Glass to scratch-resistant **Sapphire Crystal** triggers an expected valuation increase of **+80.84%**[cite: 188].
+* **Movement Architecture:** Highlighting mechanical prestige, an **Automatic** movement yields an expected **+89.08%** price premium over standard utility Quartz setups, while **Manual Winding** configurations achieve a **+131.78%** expansion.
+* **Material Specification:** Upgrading from standard Mineral Glass to scratch-resistant **Sapphire Crystal** triggers an expected valuation increase of **+80.84%**.
 
 ### Marketplace Trust Dynamics
-* **Listing Volume Exposure:** A 10% expansion in a dealer's active marketplace listing portfolio is associated with an expected **+0.85%** pricing premium, serving as a proxy signal for verified commercial institutional depth[cite: 192].
-* [cite_start]**Review Volume Dispersion:** Conversely, a 10% increase in a seller's raw review volume shifts expected prices downward by **-0.95%**[cite: 193]. [cite_start]This indicates that high review counts map to high-volume, lower-margin commoditized operations rather than elite, low-frequency boutique dealers[cite: 194].
+* **Listing Volume Exposure:** A 10% expansion in a dealer's active marketplace listing portfolio is associated with an expected **+0.85%** pricing premium, serving as a proxy signal for verified commercial institutional depth.
+* **Review Volume Dispersion:** Conversely, a 10% increase in a seller's raw review volume shifts expected prices downward by **-0.95%**. This indicates that high review counts map to high-volume, lower-margin commoditized operations rather than elite, low-frequency boutique dealers.
 
 ---
 
 ## Final Structural Pricing Equation
-[cite_start]The log-linear coefficients back-transform into the following multiplicative asset pricing structure[cite: 205]:
+The log-linear coefficients back-transform into the following multiplicative asset pricing structure:
 
 $$\widehat{\text{Price}} = \$205.66 \times (1 + 89.08\%)^{\text{MovementAutomatic}} \times (1 + 131.78\%)^{\text{MovementManual winding}} \times (1 - 0.89\%)^{\text{MovementSmartwatch}} \times (1 + 32.17\%)^{\text{MovementSolar}}$$
 $$\dots \times (1 + 150.90\%)^{\text{CaseMaterialPrecious\_Metals}} \times (1 + 36.04\%)^{\text{CaseMaterialTwo\_Tone\_Plated}} \times (1 + 34.31\%)^{\text{CaseMaterialAdvanced\_Tech}} \times (1 + 11.77\%)^{\text{CaseMaterialOther}}$$
@@ -95,7 +95,7 @@ $$\dots \times (1 + 2031.73\%)^{\text{TierHaute\_Horlogerie}} \times (1 + 162.65
 
 ---
 
-## [cite_start]Final Regression Coefficients Table [cite: 207]
+## Final Regression Coefficients Table
 
 | Variable | Estimate | Std. Error | t value | Pr(>\|t\|) | Significance |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -148,8 +148,8 @@ $$\dots \times (1 + 2031.73\%)^{\text{TierHaute\_Horlogerie}} \times (1 + 162.65
 
 
 ## References
-* Raffaelli, R. (2019). *Technology Reemergence: Creating New Value for Old Technologies in Swiss Mechanical Watchmaking, 1970-2008*. Administrative Science Quarterly, Vol. [cite_start]64(3), 576-618. https://journals.sagepub.com/doi/full/10.1177/0001839218778505 [cite: 245, 246, 247]
-* Steele, D. (2026). *Luxury Watches as a Frontier Asset Market: Institutional Depth, Trust Infrastructure, and the Economics of Secondary Exchange*. [cite_start]Watch Schools Working Paper Series (Working Paper No. 1). https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6328658 [cite: 248, 249, 250]
+* Raffaelli, R. (2019). *Technology Reemergence: Creating New Value for Old Technologies in Swiss Mechanical Watchmaking, 1970-2008*. Administrative Science Quarterly, Vol. 64(3), 576-618. https://journals.sagepub.com/doi/full/10.1177/0001839218778505
+* Steele, D. (2026). *Luxury Watches as a Frontier Asset Market: Institutional Depth, Trust Infrastructure, and the Economics of Secondary Exchange*. Watch Schools Working Paper Series (Working Paper No. 1). https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6328658
 
 ---
 
